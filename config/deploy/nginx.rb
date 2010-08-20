@@ -72,6 +72,7 @@ namespace :deploy do
             rewrite ^/(.*) https://#{domain}/$1 permanent;
           }
         EOF
+        sudo_put nginx_config_file, "#{nginx_conf_dir}/#{application}.conf"
       end
     end
   end

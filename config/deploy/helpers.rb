@@ -1,9 +1,6 @@
-def run(cmd)
-  if ruby_path
-    super("export PATH=#{ruby_path}:$PATH && #{cmd}")
-  else
-    super(cmd)
-  end
+def run(cmd, options = {}, &block)
+  options.merge!(:env => { "PATH" => "#{ruby_path}:$PATH" }) if ruby_path
+  super(cmd, options, &block)
 end
 
 def sudo_put(data, target)

@@ -9,9 +9,5 @@ load "#{lib_path}/gems.rb"
 load "#{lib_path}/deploy.rb"
 load "#{lib_path}/symlinks.rb"
 load "#{lib_path}/process.rb"
-load "#{lib_path}/jr.rb"
-
-def run(cmd, options = {}, &block)
-  options.merge!(:env => { "PATH" => "/usr/local/ruby19/bin:$PATH" })
-  super(cmd, options, &block)
-end
+load "#{lib_path}/nginx.rb"
+load "#{lib_path}/apache.rb"
