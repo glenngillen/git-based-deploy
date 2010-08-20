@@ -11,3 +11,6 @@ load "#{lib_path}/symlinks.rb"
 load "#{lib_path}/process.rb"
 load "#{lib_path}/nginx.rb"
 load "#{lib_path}/apache.rb"
+
+# load deployment targets
+load "#{lib_path}/targets.rb"
