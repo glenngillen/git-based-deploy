@@ -1,7 +1,7 @@
 namespace :deploy do
   namespace :apache do
-    desc "Setup apache config file"
     task :setup, :roles => :web do
+      return unless web_server == :apache
       if uses_ssl
         deploy.apache.ssl.setup
       else
@@ -20,10 +20,9 @@ namespace :deploy do
       end
     end
     namespace :ssl do
-      desc "Setup apache config file for serving site over SSL/HTTPS"
       task :setup, :roles => :web do
       end
     end
   end
-  after "deploy:setup", "deploy:#{webserver.to_s}:setup"
+  after "deploy:setup", "deploy:apache:setup"
 end

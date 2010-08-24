@@ -6,24 +6,15 @@ namespace :deploy do
 
   desc "Restart the application"    
   task :restart, :roles => :app, :except => { :no_release => true } do
-    run "#{try_sudo} touch #{File.join(current_path,'tmp','restart.txt')}"
+    run "touch #{File.join(current_path,'tmp','restart.txt')}"
+  end
+
+  namespace :web do
+    task :restart, :roles => :app do
+      eval("deploy.#{web_server.to_s}.restart")
+    end
   end
 end
 
-namespace :nginx do
-  desc "Start"    
-  task :start, :roles => :web do
-    sudo "/etc/init.d/nginx start" 
-  end
 
-  desc "Kill nginx"    
-  task :stop, :roles => :web do
-    sudo "/etc/init.d/nginx stop" 
-  end
-
-  desc "Restart nginx"    
-  task :restart, :roles => :web do
-    sudo "/etc/init.d/nginx restart"
-  end
-end
-after "deploy:setup", "nginx:restart"
+after "deploy:setup", "deploy:web:restart"

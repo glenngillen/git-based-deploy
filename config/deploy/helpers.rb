@@ -1,5 +1,15 @@
+def set(*args)
+  if args.first == :web_server
+    lib_path = File.dirname(__FILE__)
+    load "#{lib_path}/#{args.last.to_s}.rb"
+  end
+  super(*args)
+end
+
 def run(cmd, options = {}, &block)
-  options.merge!(:env => { "PATH" => "#{ruby_path}:$PATH" }) if ruby_path
+  if respond_to?(:ruby_path) && !ruby_path.nil?
+    options.merge!(:env => { "PATH" => "#{ruby_path}:$PATH" })
+  end
   super(cmd, options, &block)
 end
 

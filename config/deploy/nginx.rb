@@ -1,21 +1,39 @@
 namespace :deploy do
   namespace :nginx do
-    desc "Setup nginx config file"
+    task :start, :roles => :web do
+      sudo "/etc/init.d/nginx start" 
+    end
+
+    task :stop, :roles => :web do
+      sudo "/etc/init.d/nginx stop" 
+    end
+
+    task :restart, :roles => :web do
+      sudo "/etc/init.d/nginx restart"
+    end
+    
     task :setup, :roles => :web do
+      return unless web_server == :nginx
       if uses_ssl
         deploy.nginx.ssl.setup
       else
+        if respond_to?(:rails_env)
+          nginx_rails_env = rails_env || "production"
+        else
+          nginx_rails_env = "production"
+        end
         nginx_config_file = <<-EOF
           server {
-            listen   80;
+            listen   #{web_port};
             passenger_enabled on;
             keepalive_timeout    70;
             client_max_body_size 50M;
-            server_name www.#{domain} #{domain};
+            server_name #{domain};
+            rails_env #{nginx_rails_env};
             root #{deploy_to}/current/public;
             access_log  /var/log/nginx/#{domain}.access.log;
             error_log  /var/log/nginx/#{domain}.error.log;
-
+            
             if (-f $document_root/system/maintenance.html) {
               rewrite  ^(.*)$  /system/maintenance.html last;
               break;
@@ -27,12 +45,16 @@ namespace :deploy do
             }
           }
         EOF
-        sudo_put nginx_config_file, "#{nginx_conf_dir}/#{application}.conf"
+        sudo_put nginx_config_file, "#{nginx_conf_dir}/#{application}_#{nginx_rails_env}.conf"
       end
     end
     namespace :ssl do
-      desc "Setup nginx config file for serving site over SSL/HTTPS"
       task :setup, :roles => :web do
+        if respond_to?(:rails_env)
+          nginx_rails_env = rails_env || "production"
+        else
+          nginx_rails_env = "production"
+        end
         nginx_config_file = <<-EOF
           server {
             listen   443;
@@ -72,9 +94,9 @@ namespace :deploy do
             rewrite ^/(.*) https://#{domain}/$1 permanent;
           }
         EOF
-        sudo_put nginx_config_file, "#{nginx_conf_dir}/#{application}.conf"
+        sudo_put nginx_config_file, "#{nginx_conf_dir}/#{application}_#{nginx_rails_env}.conf"
       end
     end
   end
-  after "deploy:setup", "deploy:#{webserver.to_s}:setup"
+  after "deploy:setup", "deploy:nginx:setup"
 end
