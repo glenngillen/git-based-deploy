@@ -1,0 +1,29 @@
+# GitHub-esque deployment using Capistrano and Git
+
+If you're deploying your rails application from a `git` repository using `capistrano` there are a few inefficiencies in the process. Chris Wanstrath gave a [good example](http://github.com/blog/470-deployment-script-spring-cleaning) of them and how to make your deployments more efficient.
+
+I've packaged those changes up into a more reusable format for the projects I'm working on, it's by no means perfect but patches are gladly accepted.
+
+## Installation
+
+Just put the files and directories from this repository into the root of your rails app.
+
+## Configuration
+
+Settings that are used across all your deployment targets are in `config/deploy/settings.rb`. If you're deploying to multiple different environments (staging, production, etc.) settings for each target environment live in `config/deploy/targets.rb`
+
+## Deploying
+
+Most of the usual capistrano tasks are available. To setup the expected directory structure on the server run the following:
+
+		cap target_name deploy:setup
+		
+This will create the `deploy_to` path, the `current` and `shared` sub-directories within it, and checkout your code. It will also try to create the appropriate web-server config (for apache or nginx), the main .conf file for your web-server will need to be setup to include *.conf in the relevant directory. Take a look at `config/deploy/apache.rb` and `config/deploy/nginx.rb` for the relevant config templates.
+
+To update a deployed codebase just run:
+
+		cap target_name deploy
+		
+## Credits
+
+Chris and the guys at GitHub for the initial templates and inspiration.
