@@ -6,10 +6,16 @@ def set(*args)
   super(*args)
 end
 
-def run(cmd, options = {}, &block)
-  if respond_to?(:ruby_path) && !ruby_path.nil?
-    options.merge!(:env => { "PATH" => "#{ruby_path}:$PATH" })
+def value(setting, default = nil)
+  if respond_to?(setting) && !send(setting).nil?
+    send(setting)
+  else
+    default
   end
+end
+
+def run(cmd, options = {}, &block)
+  options.merge!(:env => { "PATH" => "#{ruby_path}:$PATH" }) if value(:ruby_path)
   super(cmd, options, &block)
 end
 
