@@ -1,11 +1,3 @@
-set :normal_symlinks, %w(
-  config/database.yml
-)
- 
-set :weird_symlinks, {
-  'system'             => 'public/system'
-}
- 
 namespace :symlinks do
   task :make, :roles => :app, :except => { :no_release => true } do
     run "mkdir -p #{current_path}/tmp"
