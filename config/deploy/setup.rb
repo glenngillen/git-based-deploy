@@ -8,10 +8,10 @@ namespace :deploy do
                 "mkdir -p #{deploy_to}/shared/logs"]
     run commands.join(" && ")
   end
+  after "deploy:setup", "gems:install"
   
   desc "Sets up and starts a new application."
   task :cold do
     deploy.setup
-    deploy
   end
 end

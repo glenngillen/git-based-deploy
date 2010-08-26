@@ -24,5 +24,4 @@ namespace :deploy do
       end
     end
   end
-  after "deploy:setup", "deploy:apache:setup"
 end

@@ -10,11 +10,13 @@ namespace :deploy do
   end
 
   namespace :web do
+    tast :setup, :roles => :app do
+      eval("deploy.#{web_server.to_s}.setup")
+    end
+    
     task :restart, :roles => :app do
       eval("deploy.#{web_server.to_s}.restart")
     end
   end
 end
-
-
 after "deploy:setup", "deploy:web:restart"

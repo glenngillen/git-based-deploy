@@ -98,5 +98,4 @@ namespace :deploy do
       end
     end
   end
-  after "deploy:setup", "deploy:nginx:setup"
 end
