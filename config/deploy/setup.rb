@@ -5,7 +5,8 @@ namespace :deploy do
                 "git clone #{repository} #{current_path}",
                 "mkdir -p #{current_path}/tmp",
                 "mkdir -p #{deploy_to}/shared/config",
-                "mkdir -p #{deploy_to}/shared/logs"]
+                "mkdir -p #{deploy_to}/shared/logs",
+                "mkdir -p #{deploy_to}/shared/system"]
     run commands.join(" && ")
   end
   after "deploy:setup", "gems:install"
