@@ -8,6 +8,6 @@ set :normal_symlinks, %w(
   config/database.yml
 )
 set :weird_symlinks, {
-  "system"             => "public/system"
+  "system"             => "public/system",
   "logs"               => "log"
 }
