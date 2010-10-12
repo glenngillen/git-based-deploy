@@ -20,6 +20,16 @@ namespace :deploy do
     desc "Rollback a single commit."
     task :code, :except => { :no_release => true } do
       set :branch, "HEAD^"
+      reverse_migrations_cmd = [
+        "git diff #{branch} --name-only --diff-filter=A"
+        "egrep -e '^db/migrate/[0-9]{14}_'"
+        "cut -d/ -f 3"
+        "cut -d_ -f 1"
+        "sort -r"
+        "xargs bundle exec rake db:migrate:down VERSION="]
+      commands = ["cd #{current_path}",
+                  reverse_migrations_cmd.join(" | ")]
+      run commands.join("; ")
       deploy.default
     end
 
