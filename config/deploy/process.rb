@@ -10,7 +10,7 @@ namespace :deploy do
   end
 
   namespace :web do
-    tast :setup, :roles => :app do
+    task :setup, :roles => :app do
       eval("deploy.#{web_server.to_s}.setup")
     end
     
