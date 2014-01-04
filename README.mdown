@@ -17,13 +17,15 @@ Settings that are used across all your deployment targets are in `config/deploy/
 Most of the usual capistrano tasks are available. To setup the expected directory structure on the server run the following:
 
 		cap target_name deploy:setup
-		
+
 This will create the `deploy_to` path, the `current` and `shared` sub-directories within it, and checkout your code. It will also try to create the appropriate web-server config (for apache or nginx), the main .conf file for your web-server will need to be setup to include *.conf in the relevant directory. Take a look at `config/deploy/apache.rb` and `config/deploy/nginx.rb` for the relevant config templates.
 
 To update a deployed codebase just run:
 
 		cap target_name deploy
-		
+
 ## Credits
 
 Chris and the guys at GitHub for the initial templates and inspiration.
+
+[![Analytics](https://ga-beacon.appspot.com/UA-46840117-1/git-based-deploy/readme?pixel)](https://github.com/igrigorik/ga-beacon)
